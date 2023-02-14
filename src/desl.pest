@@ -1,0 +1,44 @@
+// DESL Grammar
+
+Shader = _{ SOI ~ (declaration | equation)* ~ EOI }
+
+declaration = { "let" ~ WHITESPACE ~ identifier ~ ((colon ~ type | eq ~ value) ~ semicolon | (colon ~ type ~ eq ~ value) ~ semicolon) }
+equation    = { identifier ~ eq ~ value ~ semicolon }
+
+identifier = { (ASCII_ALPHA ~ ASCII_ALPHANUMERIC*) }
+
+type = { 
+    "bool" 
+    | "u32"
+    | "i32" 
+    | "f32" 
+    | "vec2"
+    | "vec3"
+    | "vec4" 
+    | "string" 
+}
+
+keyword = { "let" | "if" | "fn" }
+
+bool    = { "true" | "false" }              // false, true
+u32     = { ASCII_DIGIT+ }                  // 123
+i32     = { u32 | "-" ~ u32 }               // 123, -456
+f32     = { i32 ~ "." ~ u32 }               // 123.456, -789.0
+string  = { quot ~ (!quot ~ ANY)* ~ quot }  // "hello world"
+value   = {
+    bool
+    | u32
+    | i32
+    | f32
+    | string
+}
+
+eq			  = { "=" }
+semicolon     = { ";" }
+colon     	  = { ":" }
+quot          = _{ QUOTATION_MARK }
+line_comment  = _{ ("//" ~ (!NEWLINE ~ ANY)*) }
+block_comment = _{ "/*" ~ (block_comment | !"*/" ~ ANY)* ~ "*/" }
+
+COMMENT       = _{ block_comment | line_comment }
+WHITESPACE    = _{ " " | "\t" | NEWLINE }
