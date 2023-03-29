@@ -5,7 +5,9 @@ pub extern crate pest_derive;
 
 pub mod error;
 pub mod parser;
+pub mod prelude;
 
+#[derive(Clone, Debug, Default, Hash, PartialEq)]
 pub struct Desl {
     source: String,
     vertex_compiled: Box<[u32]>,
@@ -46,11 +48,7 @@ macro_rules! compile {
             
             let shader = include_str!($path);
             
-            // compile DESL to GLSL ...
-            
-            // dummy
-            let source = "#version 310 es\n void main() {}";
-            
+            let source = parse(&shader);            
             let mut compiler = Compiler::new().unwrap();
             let mut options = CompileOptions::new().unwrap();
             

@@ -1,13 +1,9 @@
 //! DESL (Despero Engine Shader Language)
 
-use desl::Desl;
+use desl::prelude::*;
 
 fn main() {
-    let my_shader = desl::compile!("test0.desl");
+    let my_shader = desl::compile!("test.desl");
         
-    println!("Vertex: {:?}\n\nFragment: {:?}\n\nSource: {}", 
-        my_shader.vertex(),
-        my_shader.fragment(),
-        my_shader.source(),
-    );
+    println!("{my_shader:#?}");
 }

@@ -2,10 +2,26 @@
 
 Shader = _{ SOI ~ (declaration | equation)* ~ EOI }
 
-declaration = { "let" ~ WHITESPACE ~ identifier ~ ((colon ~ type | eq ~ value) ~ semicolon | (colon ~ type ~ eq ~ value) ~ semicolon) }
-equation    = { identifier ~ eq ~ value ~ semicolon }
+// Variable operations
+declaration = { 
+	"let " ~ identifier ~ (
+    	(colon ~ type | eq ~ value) ~ semicolon | 
+        (colon ~ type ~ eq ~ value) ~ semicolon
+    ) 
+}
+equation = { identifier ~ eq ~ value ~ semicolon }
 
-identifier = { (ASCII_ALPHA ~ ASCII_ALPHANUMERIC*) }
+// Function
+function = { 
+    "function " ~ identifier ~ "(" ~ (
+        parameter? ~ (comma ~ parameter)*
+    ) ~ ")" 
+}
+parameter = { identifier ~ colon ~ type }
+
+// Misc
+keyword = { "let" | "if" | "function" | "while" | "for" }
+identifier = { !&(keyword ~ !ASCII_ALPHA) ~ (ASCII_ALPHA ~ ASCII_ALPHANUMERIC*) }
 
 type = { 
     "bool" 
@@ -17,8 +33,6 @@ type = {
     | "vec4" 
     | "string" 
 }
-
-keyword = { "let" | "if" | "fn" }
 
 bool    = { "true" | "false" }              // false, true
 u32     = { ASCII_DIGIT+ }                  // 123
@@ -33,6 +47,7 @@ value   = {
     | string
 }
 
+comma         = { "," }
 eq			  = { "=" }
 semicolon     = { ";" }
 colon     	  = { ":" }
