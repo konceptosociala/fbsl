@@ -1,6 +1,6 @@
 // DESL Grammar
 
-Shader = _{ SOI ~ (declaration | equation)* ~ EOI }
+Shader = _{ SOI ~ (function)* ~ EOI }
 
 // Variable operations
 declaration = { 
@@ -9,19 +9,26 @@ declaration = {
         (colon ~ type ~ eq ~ value) ~ semicolon
     ) 
 }
+
 equation = { identifier ~ eq ~ value ~ semicolon }
 
 // Function
 function = { 
     "function " ~ identifier ~ "(" ~ (
         parameter? ~ (comma ~ parameter)*
-    ) ~ ")" 
+    ) ~ ")" ~ ("{" ~
+        (declaration | equation)*
+    ~ "}")
 }
+
 parameter = { identifier ~ colon ~ type }
+
+call = _{ "" }
 
 // Misc
 keyword = { "let" | "if" | "function" | "while" | "for" }
-identifier = { !&(keyword ~ !ASCII_ALPHA) ~ (ASCII_ALPHA ~ ASCII_ALPHANUMERIC*) }
+
+identifier = { !&(keyword ~ !ASCII_ALPHA) ~ ((ASCII_ALPHA | "_" ) ~ ASCII_ALPHANUMERIC*) }
 
 type = { 
     "bool" 

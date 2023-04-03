@@ -1,1 +1,4 @@
-let x = 2;
+function x(_a: u32, _b: bool){
+    let x: u32 = 2;
+    x = 2;
+}

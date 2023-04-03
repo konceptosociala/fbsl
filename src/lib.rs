@@ -27,6 +27,14 @@ impl Desl {
         }
     }
     
+    pub fn empty() -> Self {
+        Desl {
+            source: String::new(),
+            vertex_compiled: Box::new([]),
+            fragment_compiled: Box::new([]),
+        }
+    }
+    
     pub fn source(&self) -> &str {
         self.source.as_str()
     }
@@ -48,7 +56,13 @@ macro_rules! compile {
             
             let shader = include_str!($path);
             
-            let source = parse(&shader);            
+            let source = match parse(&shader) {
+                Ok(s) => s,
+                Err(e) => {
+                    panic!("{e}");
+                },
+            };
+            
             let mut compiler = Compiler::new().unwrap();
             let mut options = CompileOptions::new().unwrap();
             
