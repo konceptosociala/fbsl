@@ -1,6 +1,17 @@
 // DESL Grammar
 
-Shader = _{ SOI ~ (function)* ~ EOI }
+Shader = _{ SOI ~ 
+    (ruleset)* ~ 
+    (input)* ~ 
+    (function)+ ~ 
+EOI }
+
+// Setup rules
+ruleset = { "rule" ~ rule ~ semicolon }
+rule = { "DEFAULT" | "DEBUG" }
+
+// Input variables
+input = { "input" ~ identifier ~ colon ~ type ~ semicolon }
 
 // Variable operations
 declaration = { 
@@ -10,25 +21,32 @@ declaration = {
     ) 
 }
 
-equation = { identifier ~ eq ~ value ~ semicolon }
+equation = { identifier ~ eq ~ assignment ~ semicolon }
+
+operation = { identifier ~ (operator ~ (identifier | value))+ }
+
+comparison = { identifier ~ compare ~ identifier ~ semicolon }
+
+compare = { "==" | "!=" | ">" | "<" | ">=" | "<=" }
+operator = { "+" | "-" | "*" | "/" | "%" }
+assignment = { operation| identifier | value }
 
 // Function
 function = { 
     "function " ~ identifier ~ "(" ~ (
         parameter? ~ (comma ~ parameter)*
     ) ~ ")" ~ ("{" ~
-        (declaration | equation)*
+        (declaration | equation | operation | comparison)*
     ~ "}")
 }
-
 parameter = { identifier ~ colon ~ type }
 
 call = _{ "" }
 
 // Misc
-keyword = { "let" | "if" | "function" | "while" | "for" }
+keyword = { "rule" | "input" | "let" | "if" | "function" | "while" | "for"  }
 
-identifier = { !&(keyword ~ !ASCII_ALPHA) ~ ((ASCII_ALPHA | "_" ) ~ ASCII_ALPHANUMERIC*) }
+identifier = ${ !&(keyword ~ !ASCII_ALPHA) ~ ((ASCII_ALPHA | "_" ) ~ (ASCII_ALPHANUMERIC | "_")*) }
 
 type = { 
     "bool" 
@@ -38,7 +56,8 @@ type = {
     | "vec2"
     | "vec3"
     | "vec4" 
-    | "string" 
+    | "string"
+    | "texture"
 }
 
 bool    = { "true" | "false" }              // false, true
@@ -46,7 +65,7 @@ u32     = { ASCII_DIGIT+ }                  // 123
 i32     = { u32 | "-" ~ u32 }               // 123, -456
 f32     = { i32 ~ "." ~ u32 }               // 123.456, -789.0
 string  = { quot ~ (!quot ~ ANY)* ~ quot }  // "hello world"
-value   = {
+value   = ${
     bool
     | u32
     | i32

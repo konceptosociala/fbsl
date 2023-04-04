@@ -27,14 +27,6 @@ impl Desl {
         }
     }
     
-    pub fn empty() -> Self {
-        Desl {
-            source: String::new(),
-            vertex_compiled: Box::new([]),
-            fragment_compiled: Box::new([]),
-        }
-    }
-    
     pub fn source(&self) -> &str {
         self.source.as_str()
     }
