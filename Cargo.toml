@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-pest = "2.5"
+pest = { version = "2.5", features = ["pretty-print"] }
 pest_derive = "2.5"
 thiserror = "1.0.38"
 shaderc = "0.7.4"

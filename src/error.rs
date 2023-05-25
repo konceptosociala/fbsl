@@ -1,4 +1,5 @@
 use std::fmt;
+use std::str::FromStr;
 use std::num::NonZeroUsize;
 use std::error::Error as StdError;
 use thiserror::Error;
@@ -7,6 +8,8 @@ use crate::parser::Rule;
 
 #[derive(Debug, Error)]
 pub enum DeslError {
+    #[error("Invalid LineColumn passed: {0}")]
+    InvalidLineColumn(String),
     #[error("Error parsing DESL code:\n{0}")]
     ParsingError(#[from] PestError<Rule>),
     #[error("Compilation error:\n{0}")]
@@ -22,6 +25,29 @@ impl LineColumn {
             NonZeroUsize::new(line).unwrap(),
             NonZeroUsize::new(col).unwrap(),
         )
+    }
+}
+
+impl FromStr for LineColumn {
+    type Err = DeslError;
+
+    /// let line_col = LineColumn::from_str("12:4").unwrap();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let (line, col) = s.split_once(':').ok_or(DeslError::InvalidLineColumn(s.into()))?;
+
+        let parsed_line = line.parse::<usize>().map_err(|_| DeslError::InvalidLineColumn(s.into()))?;
+        let parsed_col = col.parse::<usize>().map_err(|_| DeslError::InvalidLineColumn(s.into()))?;
+        
+        let nonzero_line = NonZeroUsize::new(parsed_line).ok_or(DeslError::InvalidLineColumn(s.into()))?;
+        let nonzero_col = NonZeroUsize::new(parsed_col).ok_or(DeslError::InvalidLineColumn(s.into()))?;
+
+        Ok(LineColumn(nonzero_line, nonzero_col))
+    }
+}
+
+impl fmt::Display for LineColumn {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {        
+        write!(f, "  --> {}:{}", self.0, self.1)
     }
 }
 
@@ -57,7 +83,7 @@ impl CompileError {
         
         format!(
 
-"Line: {}, Column: {}
+"{}
 {} |
 {} | {}
 {} | {}
@@ -66,8 +92,7 @@ impl CompileError {
 ERROR: {}
 ", 
 
-self.line_col.0, 
-self.line_col.1, 
+self.line_col, 
 
 spacing,
 
