@@ -1,9 +1,9 @@
 //! SOL (Sonja Ombrigila Lingvo)
 
-use sol::prelude::*;
+use sol_rs::prelude::*;
 
 fn main() {
-    let my_shader = sol::compile!("test.sol");
+    let my_shader = sol_rs::compile!("test.sol");
         
     println!("{my_shader:#?}");
 }
