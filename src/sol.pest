@@ -1,4 +1,4 @@
-// DESL Grammar
+// SOL Grammar
 
 Shader = _{ SOI ~ 
     (ruleset)* ~ 

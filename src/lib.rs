@@ -8,19 +8,19 @@ pub mod parser;
 pub mod prelude;
 
 #[derive(Clone, Debug, Default, Hash, PartialEq)]
-pub struct Desl {
+pub struct Sol {
     source: String,
     vertex_compiled: Box<[u32]>,
     fragment_compiled: Box<[u32]>,
 }
 
-impl Desl {
+impl Sol {
     pub fn new(
         source: String,
         vertex_compiled: Box<[u32]>,
         fragment_compiled: Box<[u32]>,
     ) -> Self {
-        Desl {
+        Sol {
             source,
             vertex_compiled,
             fragment_compiled,
@@ -42,7 +42,7 @@ impl Desl {
 
 #[macro_export]
 macro_rules! compile {
-    ($path:expr $(,)?) => {
+    ($path:expr) => {
         {
             use shaderc::{Compiler, CompileOptions, ShaderKind};
             
@@ -74,7 +74,7 @@ macro_rules! compile {
                 Some(&options)
             ).unwrap();
             
-            Desl::new(
+            Sol::new(
                 source.into(), 
                 vertex_compiled.as_binary().into(), 
                 fragment_compiled.as_binary().into(),

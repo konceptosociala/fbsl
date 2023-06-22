@@ -5,11 +5,11 @@ use pest::Parser;
 use crate::error::*;
 
 #[derive(Parser)]
-#[grammar = "desl.pest"]
-pub struct DeslParser;
+#[grammar = "sol.pest"]
+pub struct SolParser;
 
-pub fn parse(shader: &str) -> DeslResult<&'static str> {    
-    let desl = match DeslParser::parse(Rule::Shader, &shader) {
+pub fn parse(shader: &str) -> SolResult<&'static str> {    
+    let _sol = match SolParser::parse(Rule::Shader, &shader) {
         Ok(p) => p,
         Err(e) => return Err(e.into()),
     };

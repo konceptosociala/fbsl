@@ -1,9 +1,9 @@
-//! DESL (Despero Engine Shader Language)
+//! SOL (Sonja Ombrigila Lingvo)
 
-use desl::prelude::*;
+use sol::prelude::*;
 
 fn main() {
-    let my_shader = desl::compile!("test.desl");
+    let my_shader = sol::compile!("test.sol");
         
     println!("{my_shader:#?}");
 }

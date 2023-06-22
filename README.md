@@ -1,1 +1,1 @@
-# DESL - Despero Engine Shader Language
+# SOL - Sonja Ombrigila Lingvo (Sonja Shader Language)
