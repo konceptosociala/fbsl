@@ -13,6 +13,8 @@ pub fn parse(shader: &str) -> SolResult<&'static str> {
         Ok(p) => p,
         Err(e) => return Err(e.into()),
     };
+
+    println!("{_sol}");
     
     Ok("#version 310 es\n void main() {}")
 }
