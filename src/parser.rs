@@ -5,16 +5,16 @@ use pest::Parser;
 use crate::error::*;
 
 #[derive(Parser)]
-#[grammar = "sol.pest"]
-pub struct SolParser;
+#[grammar = "fbsl.pest"]
+pub struct FbslParser;
 
-pub fn parse(shader: &str) -> SolResult<&'static str> {    
-    let _sol = match SolParser::parse(Rule::Shader, &shader) {
+pub fn parse(shader: &str) -> FbslResult<&'static str> {    
+    let _fbsl = match FbslParser::parse(Rule::Shader, &shader) {
         Ok(p) => p,
         Err(e) => return Err(e.into()),
     };
 
-    println!("{_sol}");
+    println!("{_fbsl}");
     
     Ok("#version 310 es\n void main() {}")
 }

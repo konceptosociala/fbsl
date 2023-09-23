@@ -7,10 +7,10 @@ use pest::error::Error as PestError;
 use crate::parser::Rule;
 
 #[derive(Debug, Error)]
-pub enum SolError {
+pub enum FbslError {
     #[error("Invalid LineColumn passed: {0}")]
     InvalidLineColumn(String),
-    #[error("Error parsing SOL code:\n{0}")]
+    #[error("Error parsing FBSL code:\n{0}")]
     ParsingError(#[from] PestError<Rule>),
     #[error("Compilation error:\n{0}")]
     CompileError(#[from] CompileError),
@@ -29,20 +29,20 @@ impl LineColumn {
 }
 
 impl FromStr for LineColumn {
-    type Err = SolError;
+    type Err = FbslError;
 
     /// # Usage example
     /// ```rust
     /// let line_col = LineColumn::from_str("12:4").unwrap();
     /// ```
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (line, col) = s.split_once(':').ok_or(SolError::InvalidLineColumn(s.into()))?;
+        let (line, col) = s.split_once(':').ok_or(FbslError::InvalidLineColumn(s.into()))?;
 
-        let parsed_line = line.parse::<usize>().map_err(|_| SolError::InvalidLineColumn(s.into()))?;
-        let parsed_col = col.parse::<usize>().map_err(|_| SolError::InvalidLineColumn(s.into()))?;
+        let parsed_line = line.parse::<usize>().map_err(|_| FbslError::InvalidLineColumn(s.into()))?;
+        let parsed_col = col.parse::<usize>().map_err(|_| FbslError::InvalidLineColumn(s.into()))?;
         
-        let nonzero_line = NonZeroUsize::new(parsed_line).ok_or(SolError::InvalidLineColumn(s.into()))?;
-        let nonzero_col = NonZeroUsize::new(parsed_col).ok_or(SolError::InvalidLineColumn(s.into()))?;
+        let nonzero_line = NonZeroUsize::new(parsed_line).ok_or(FbslError::InvalidLineColumn(s.into()))?;
+        let nonzero_col = NonZeroUsize::new(parsed_col).ok_or(FbslError::InvalidLineColumn(s.into()))?;
 
         Ok(LineColumn(nonzero_line, nonzero_col))
     }
@@ -125,4 +125,4 @@ impl StdError for CompileError {
     }
 }
 
-pub type SolResult<T> = Result<T, SolError>;
+pub type FbslResult<T> = Result<T, FbslError>;

@@ -1,4 +1,4 @@
-// SOL Grammar
+// FBSL Grammar
 
 Shader = _{ SOI ~ 
     (ruleset)* ~ 

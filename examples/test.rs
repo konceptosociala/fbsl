@@ -1,9 +1,9 @@
-//! SOL (Sonja Ombrigila Lingvo)
+//! FBSL (Flatbox Shader Language)
 
-use sol_rs::prelude::*;
+use fbsl::prelude::*;
 
 fn main() {
-    let my_shader = sol_rs::compile!("test.sol");
+    let my_shader = fbsl::compile!("test.fbsl");
         
     println!("{my_shader:#?}");
 }

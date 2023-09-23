@@ -8,19 +8,19 @@ pub mod parser;
 pub mod prelude;
 
 #[derive(Clone, Debug, Default, Hash, PartialEq)]
-pub struct Sol {
+pub struct Fbsl {
     source: String,
     vertex_compiled: Box<[u32]>,
     fragment_compiled: Box<[u32]>,
 }
 
-impl Sol {
+impl Fbsl {
     pub fn new(
         source: String,
         vertex_compiled: Box<[u32]>,
         fragment_compiled: Box<[u32]>,
     ) -> Self {
-        Sol {
+        Fbsl {
             source,
             vertex_compiled,
             fragment_compiled,
@@ -74,7 +74,7 @@ macro_rules! compile {
                 Some(&options)
             ).unwrap();
             
-            Sol::new(
+            Fbsl::new(
                 source.into(), 
                 vertex_compiled.as_binary().into(), 
                 fragment_compiled.as_binary().into(),
